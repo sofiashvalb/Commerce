@@ -1,0 +1,45 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <div style="margin-left: 75%;">
+        <h4 style="color: rgba(29, 29, 60, 0.714);">Choose a Category:</h4>
+
+        <form action="{% url 'chosen' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <select class="input-group-text" id="category" name="category">
+                    <option value="" disabled selected>All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-success">Filter</button>
+            </div>
+        </form>
+    </div>
+    
+    <h2 style="color: rgba(29, 29, 60, 0.714);"><b>Active Listings:</b></h2>
+
+    <!--from bootstrap: using there design for a card for better look-->
+    <div class="row">
+        {% for listing in listings %}        
+            <div class="card" style="width: 15rem; padding: 10px;">
+                <a href="{% url 'listing' id=listing.id %}" >
+                    <img class="card-img-top" src="{{ listing.image}}" alt="photo of {{ listing.title }}">
+                </a>
+                <div class="card-body">
+                    <a href="{% url 'listing' id=listing.id %}" style="color:black">
+                        <h4 class="card-title">{{ listing.title }}</h4>
+                    </a>
+                    <p style="font-size: 13px;">Category: <b>{{ listing.category }}</b></p>
+                    <a href="{% url 'listing' id=listing.id %}" style="color:black">
+                        <p class="card-text">{{ listing.description }}</p>
+                    </a>
+                    <h4>price: ${{ listing.price }}</h4>
+                    <p style="font-size: 13px;">Owner: {{ listing.owner }}</p>
+                    <a href="{% url 'listing' id=listing.id %}" class="btn btn-primary">More details</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
